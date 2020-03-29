@@ -1,6 +1,9 @@
 import os
 from . import db
-from flask import Flask
+from flask import (
+    Flask, Blueprint, flash, g, redirect, render_template, request
+)
+from .module.Scrapper import Scrapper, test_print
 
 
 def create_app(test_config=None):
@@ -23,5 +26,17 @@ def create_app(test_config=None):
         return 'Hello, World!'
 
     db.init_app(app)
+
+    @app.route('/extraction', methods=['GET', 'POST'])
+    def extract():
+        if request.method == "POST":
+            product_id = request.form.get('product-id')
+            Scrapper(product_id).scrap()
+
+        return render_template('extraction.html')
+
+    @app.route('/products')
+    def get_products():
+        test_print()
 
     return app
