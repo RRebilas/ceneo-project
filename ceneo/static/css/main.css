@@ -1,0 +1,24 @@
+html,
+body,
+.container-fluid.content {
+    height: 100%;
+}
+
+.container-fluid.content {
+    margin: 56px auto;
+    padding-top: 50px;
+ }
+
+#mainNav {
+    background-color: rgb(235, 148, 34);
+}
+li.nav-item.nav-link {
+    padding: 0;
+}
+li.nav-item.nav-link a.nav-link {
+    color: white;
+}
+
+.flash {
+    color: white;
+}

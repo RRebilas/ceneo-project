@@ -1,4 +1,5 @@
 class Opinion:
+
     def __init__(self, opinion):
         self.opinion_id = int(opinion["data-entry-id"])
         self.author = opinion.find("div", "reviewer-name-line").string.strip()

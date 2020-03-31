@@ -3,7 +3,7 @@ from . import db
 from flask import (
     Flask, Blueprint, flash, g, redirect, render_template, request
 )
-from .module.Scrapper import Scrapper, test_print
+from .module.Scrapper import Scrapper
 
 
 def create_app(test_config=None):
@@ -20,23 +20,30 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
     db.init_app(app)
+
+    # a simple page that says hello
+    @app.route('/')
+    @app.route('/index')
+    def index():
+        return render_template('index.html')
 
     @app.route('/extraction', methods=['GET', 'POST'])
     def extract():
         if request.method == "POST":
             product_id = request.form.get('product-id')
-            Scrapper(product_id).scrap()
+            if product_id is '':
+                flash("Podaj kod produktu!")
+            else:
+                Scrapper(product_id).scrap()
 
         return render_template('extraction.html')
 
-    @app.route('/products')
-    def get_products():
-        test_print()
+    from . import products
+    app.register_blueprint(products.bp)
+
+    @app.route('/about')
+    def about():
+        return "about author"
 
     return app
