@@ -20,32 +20,27 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    db.init_app(app)
+
     # a simple page that says hello
     @app.route('/')
     @app.route('/index')
     def index():
         return render_template('index.html')
 
-    db.init_app(app)
-
     @app.route('/extraction', methods=['GET', 'POST'])
     def extract():
         if request.method == "POST":
             product_id = request.form.get('product-id')
             if product_id is '':
-                flash("Podaj kod produktu")
+                flash("Podaj kod produktu!")
             else:
                 Scrapper(product_id).scrap()
 
         return render_template('extraction.html')
 
-    @app.route('/products')
-    def products():
-        return "product page"
-
-    @app.route('/opinions')
-    def opinions():
-        return "opinions page"
+    from . import products
+    app.register_blueprint(products.bp)
 
     @app.route('/about')
     def about():

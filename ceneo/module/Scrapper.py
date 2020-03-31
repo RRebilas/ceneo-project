@@ -14,7 +14,6 @@ class ProductPage:
     def __init__(self, product_id):
         self.product_id = product_id
         self.opinions = []
-        self.product_url = ProductPage.prefix + product_id + ProductPage.postfix
         self.product_name = ''
         self.page_tree = None
         self.page_response = None
@@ -48,8 +47,8 @@ class Product(ProductPage):
         db = get_db()
 
         if not self.if_product_exists():
-            db.execute('Insert INTO products Values (?, ?, ?)',
-                       (int(self.product_id), self.product_name, self.product_url))
+            db.execute('Insert INTO products Values (?, ?)',
+                       (int(self.product_id), self.product_name))
             db.commit()
 
     def db_insert_opinions(self, element):
@@ -71,31 +70,31 @@ class Scrapper(Product):
             return True
         return False
 
+    def scrap(self):
 
-def scrap(self):
+        if self.connection():
 
-    if self.connection():
+            self.product_name = self.page_tree.find('h1', 'product-name').string
 
-        self.product_name = self.page_tree.find('h1', 'product-name').string
+            if not self.if_product_exists():
+                self.db_insert_product()
+                # probably that will be a function to call
+                while self.url:
+                    if self.connection():
+                        opinions_all = self.page_tree.find_all("li", "js_product-review")
+                        for element in opinions_all:
+                            # Call object and append to list
+                            self.db_insert_opinions(Opinion(element))
+                        try:
+                            self.url = Product.prefix + self.page_tree.find('a', 'pagination__next')['href']
+                        except TypeError:
+                            self.url = None
+                    else:
+                        flash("Błąd połączenia")
+                        break
+            else:
+                # redirect to product page
+                flash("Produkt istnieje")
 
-        if not self.if_product_exists():
-            self.db_insert_product()
-            # probably that will be a function to call
-            while self.url:
-                if self.connection():
-                    opinions_all = self.page_tree.find_all("li", "js_product-review")
-                    for element in opinions_all:
-                        # Call object and append to list
-                        self.db_insert_opinions(Opinion(element))
-                    try:
-                        self.url = Product.prefix + self.page_tree.find('a', 'pagination__next')['href']
-                    except TypeError:
-                        self.url = None
-                else:
-                    flash("Błąd połączenia")
-                    break
         else:
-            flash("Produkt istnieje")
-
-    else:
-        flash("Brak danego produktu lub błąd połączenia")
+            flash("Brak danego produktu lub błąd połączenia")

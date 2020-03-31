@@ -3,8 +3,7 @@ DROP TABLE IF EXISTS opinions;
 
 CREATE TABLE products (
                           product_id INTEGER PRIMARY KEY NOT NULL UNIQUE,
-                          product_name VARCHAR (255) NOT NULL,
-                          product_url VARCHAR (255) NOT NULL
+                          product_name VARCHAR (255) NOT NULL
 );
 
 CREATE TABLE opinions (
