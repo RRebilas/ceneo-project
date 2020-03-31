@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from .Opinion import Opinion
 from ceneo.db import get_db
 import json
+from flask import (flash, redirect)
 
 
 class ProductPage:
@@ -15,6 +16,8 @@ class ProductPage:
         self.opinions = []
         self.product_url = ProductPage.prefix + product_id + ProductPage.postfix
         self.product_name = ''
+        self.page_tree = None
+        self.page_response = None
 
     def to_json_file(self):
         with open(self.product_id + '.json', 'w', encoding='utf-8') as fp:
@@ -28,43 +31,66 @@ class Scrapper(ProductPage):
         super().__init__(product_id)
         self.url = Scrapper.prefix + self.product_id + Scrapper.postfix
 
+    def connection(self):
+        self.page_response = requests.get(self.url)
+        if self.page_response.status_code == 200:
+            self.page_tree = BeautifulSoup(self.page_response.text, "html.parser")
+            return True
+        return False
+
     def scrap(self):
-        while self.url:
 
-            page_response = requests.get(self.url)
-            if page_response.status_code == 200:
-                page_tree = BeautifulSoup(page_response.text, "html.parser")
-                opinions_all = page_tree.find_all("li", "js_product-review")
-                self.product_name = page_tree.find('h1','product-name').string
+        if self.connection():
 
-                for element in opinions_all:
-                    # Call object and append to list
-                    self.db_insert_opinions(Opinion(element))
-                try:
-                    self.url = Scrapper.prefix + page_tree.find('a', 'pagination__next')['href']
-                except TypeError:
-                    self.url = None
+            self.product_name = self.page_tree.find('h1', 'product-name').string
+
+            if not self.if_product_exists():
+                self.db_insert_product()
+
+                while self.url:
+                    if self.connection():
+                        opinions_all = self.page_tree.find_all("li", "js_product-review")
+                        for element in opinions_all:
+                            # Call object and append to list
+                            self.db_insert_opinions(Opinion(element))
+                        try:
+                            self.url = Scrapper.prefix + self.page_tree.find('a', 'pagination__next')['href']
+                        except TypeError:
+                            self.url = None
+                    else:
+                        flash("Błąd połączenia")
+                        break
             else:
-                break
-            self.db_insert_product()
+                flash("Produkt istnieje")
+
+
+        else:
+            flash("Brak danego produktu lub błąd połączenia")
 
     #     function for adding opinion to db
-    def db_insert_product(self):
-        error = None
+
+    def if_product_exists(self):
         db = get_db()
-        if db.execute('Select product_id FROM products WHERE product_id = ?', (self.product_id,)
+
+        if db.execute('SELECT product_id FROM products WHERE product_id = ?', (self.product_id,)
                       ).fetchone() is not None:
-            #                 redirect to product page
-            error = 'Product already exists'
-        if error is None:
+            return True
+
+        return False
+
+    def db_insert_product(self):
+        db = get_db()
+
+        if not self.if_product_exists():
             db.execute('Insert INTO products Values (?, ?, ?)',
                        (int(self.product_id), self.product_name, self.product_url))
             db.commit()
 
     def db_insert_opinions(self, element):
         db = get_db()
+
         db.execute('INSERT INTO opinions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                   (element.opinion_id, element.author, element.stars, element.useful, element.useless,element.content,
-                    element.date_of_issue, element.recommendation, element.purchased,element.date_of_purchase,
+                   (element.opinion_id, element.author, element.stars, element.useful, element.useless, element.content,
+                    element.date_of_issue, element.recommendation, element.purchased, element.date_of_purchase,
                     element.cons, element.pros, self.product_id))
         db.commit()

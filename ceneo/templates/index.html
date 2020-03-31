@@ -1,43 +1,13 @@
-{% include "header.html" %}
-    <header>
-        <div id="intro" class="jumbotron d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="card-deck">
-                            <div class="card bg-light text-center">
-                                <h5 class="card-title">Cel aplikacji</h5>
-                                <div class="card-body text-center">
-                                    <p class="card-text">Sum text<br> tu będą linki do tych całych<br>
-                                    stron co ona chce</p>
-                                </div>
-                            </div>
-                            <div class="card bg-light text-center">
-                                <h5 class="card-title">Opis działania</h5>
-                                <div class="card-body text-center">
-                                    <p class="card-text">Sum text<br> tu będą linki do tych całych<br>
-                                    stron co ona chce</p>
-                                </div>
-                            </div>
-                            <div class="card bg-light text-center">
-                                <h5 class="card-title">Zastosowane biblioteki</h5>
-                                <div class="card-body text-center">
-                                    <p class="card-text">Sum text<br> tu będą linki do tych całych<br>
-                                    stron co ona chce</p>
-                                </div>
-                            </div>
-                            <div class="card bg-light text-center">
-                                <h5 class="card-title">Zastosowane podejścia</h5>
-                                <div class="card-body text-center">
-                                    <p class="card-text">Sum text<br> tu będą linki do tych całych<br>
-                                    stron co ona chce</p>
-                                </div>
-                            </div>
+{% extends 'base.html' %}
+{% block css%}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+{% endblock %}
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-{% include "footer.html" %}
+
+{% block header %}
+    <h3>{% block title %}Strona główna{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+<!--tu będą pewnie karty z tym dziwnym opisem-->
+{% endblock %}

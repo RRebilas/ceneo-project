@@ -1,18 +1,14 @@
 html,
 body,
-header,
-#intro {
+.container-fluid.content {
     height: 100%;
-    overflow: hidden;
 }
 
-#intro {
-    background: url('../images/7bfa3409803180.png') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+.container-fluid.content {
+    margin: 56px auto;
+    padding-top: 50px;
  }
+
 #mainNav {
     background-color: rgb(235, 148, 34);
 }
@@ -20,5 +16,9 @@ li.nav-item.nav-link {
     padding: 0;
 }
 li.nav-item.nav-link a.nav-link {
+    color: white;
+}
+
+.flash {
     color: white;
 }

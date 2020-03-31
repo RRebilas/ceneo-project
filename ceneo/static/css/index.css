@@ -1,0 +1,10 @@
+body {
+    overflow: hidden;
+}
+.container-fluid.content {
+    background: url('../images/7bfa3409803180.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
