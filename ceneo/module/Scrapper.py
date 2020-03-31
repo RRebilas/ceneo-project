@@ -19,53 +19,19 @@ class ProductPage:
         self.page_tree = None
         self.page_response = None
 
+    # should be from database
+
     def to_json_file(self):
         with open(self.product_id + '.json', 'w', encoding='utf-8') as fp:
             json.dump(list(map(lambda obj: obj.__dict__, self.opinions)), fp, ensure_ascii=False,
                       indent=2, separators=(',', ': '))
 
 
-class Scrapper(ProductPage):
+class Product(ProductPage):
 
     def __init__(self, product_id):
         super().__init__(product_id)
-        self.url = Scrapper.prefix + self.product_id + Scrapper.postfix
-
-    def connection(self):
-        self.page_response = requests.get(self.url)
-        if self.page_response.status_code == 200:
-            self.page_tree = BeautifulSoup(self.page_response.text, "html.parser")
-            return True
-        return False
-
-    def scrap(self):
-
-        if self.connection():
-
-            self.product_name = self.page_tree.find('h1', 'product-name').string
-
-            if not self.if_product_exists():
-                self.db_insert_product()
-
-                while self.url:
-                    if self.connection():
-                        opinions_all = self.page_tree.find_all("li", "js_product-review")
-                        for element in opinions_all:
-                            # Call object and append to list
-                            self.db_insert_opinions(Opinion(element))
-                        try:
-                            self.url = Scrapper.prefix + self.page_tree.find('a', 'pagination__next')['href']
-                        except TypeError:
-                            self.url = None
-                    else:
-                        flash("Błąd połączenia")
-                        break
-            else:
-                flash("Produkt istnieje")
-
-
-        else:
-            flash("Brak danego produktu lub błąd połączenia")
+        self.url = Product.prefix + self.product_id + Product.postfix
 
     #     function for adding opinion to db
 
@@ -94,3 +60,42 @@ class Scrapper(ProductPage):
                     element.date_of_issue, element.recommendation, element.purchased, element.date_of_purchase,
                     element.cons, element.pros, self.product_id))
         db.commit()
+
+
+class Scrapper(Product):
+
+    def connection(self):
+        self.page_response = requests.get(self.url)
+        if self.page_response.status_code == 200:
+            self.page_tree = BeautifulSoup(self.page_response.text, "html.parser")
+            return True
+        return False
+
+
+def scrap(self):
+
+    if self.connection():
+
+        self.product_name = self.page_tree.find('h1', 'product-name').string
+
+        if not self.if_product_exists():
+            self.db_insert_product()
+            # probably that will be a function to call
+            while self.url:
+                if self.connection():
+                    opinions_all = self.page_tree.find_all("li", "js_product-review")
+                    for element in opinions_all:
+                        # Call object and append to list
+                        self.db_insert_opinions(Opinion(element))
+                    try:
+                        self.url = Product.prefix + self.page_tree.find('a', 'pagination__next')['href']
+                    except TypeError:
+                        self.url = None
+                else:
+                    flash("Błąd połączenia")
+                    break
+        else:
+            flash("Produkt istnieje")
+
+    else:
+        flash("Brak danego produktu lub błąd połączenia")
