@@ -3,7 +3,7 @@ from . import db
 from flask import (
     Flask, Blueprint, flash, g, redirect, render_template, request
 )
-from .module.Scrapper import Scrapper
+from .scrapper import Scrapper
 
 
 def create_app(test_config=None):
@@ -28,16 +28,8 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
-    @app.route('/extraction', methods=['GET', 'POST'])
-    def extract():
-        if request.method == "POST":
-            product_id = request.form.get('product-id')
-            if product_id is '':
-                flash("Podaj kod produktu!")
-            else:
-                Scrapper(product_id).scrap()
-
-        return render_template('extraction.html')
+    from . import scrapper
+    app.register_blueprint(scrapper.bp)
 
     from . import products
     app.register_blueprint(products.bp)

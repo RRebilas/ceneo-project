@@ -10,6 +10,7 @@
             <thead>
                 <tr>
                     <th>Nazwa</th>
+                    <th>Liczba opinii</th>
                     <th>Liczba wad</th>
                     <th>liczba zalet</th>
                     <th>średnia ocen</th>
@@ -17,10 +18,11 @@
                 </tr>
                 {% for product in products_list %}
                     <tr>
-                        <td>{{ product.product_name }}</td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ product.product_mean}}</td>
+                        <td><a href="{{ url_for('products.product', id=product.product_id) }}">{{ product.product_name }}</a></td>
+                        <td>{{ product.product_opinions_count}}</td>
+                        <td>{{ product.product_cons}}</td>
+                        <td>{{ product.product_pros}}</td>
+                        <td>{{ product.product_mean}}/5</td>
                         <td><button class="btn btn-dark">Pobierz</button></td>
                     </tr>
                 {% endfor %}
