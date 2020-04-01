@@ -11,9 +11,9 @@ class Opinion:
         try:
             self.recommendation = opinion.find("div", "product-review-summary").find("em").string
             self.purchased = opinion.find("div", "product-review-pz").find("em").string
-            self.date_of_purchase = opinion.find("span", "review-time").find_all("time")[1]["datetime"]
             self.cons = opinion.find("div", "cons-cell").find("ul").get_text()
             self.pros = opinion.find("div", "pros-cell").find("ul").get_text()
+            self.date_of_purchase = opinion.find("span", "review-time").find_all("time")[1]["datetime"]
         except (AttributeError, IndexError):
             self.recommendation = None
             self.purchased = None

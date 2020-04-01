@@ -1,10 +1,24 @@
 # import libraries
-import requests
 from bs4 import BeautifulSoup
-from .Opinion import Opinion
+from .module.Opinion import Opinion
 from ceneo.db import get_db
 import json
-from flask import (flash, redirect)
+from flask import (flash, redirect, url_for, Blueprint, render_template, request)
+import requests
+
+bp = Blueprint('scrapper', __name__)
+
+
+@bp.route('/extraction', methods=['GET', 'POST'])
+def extract():
+    if request.method == "POST":
+        product_id = request.form.get('product-id')
+        if product_id is '':
+            flash("Podaj kod produktu!")
+        else:
+            Scrapper(product_id).scrap()
+            return redirect(url_for('products.product', id=product_id))
+    return render_template('extraction.html')
 
 
 class ProductPage:
@@ -92,9 +106,9 @@ class Scrapper(Product):
                     else:
                         flash("Błąd połączenia")
                         break
+                return redirect(url_for('products.product', id=self.product_id))
             else:
                 # redirect to product page
-                flash("Produkt istnieje")
-
+                return redirect(url_for('products.product', id=self.product_id))
         else:
             flash("Brak danego produktu lub błąd połączenia")
