@@ -1,3 +1,10 @@
+def set_value(opinion, tag, tag_class, child):
+    try:
+        return opinion.find(tag, tag_class).find(child).get_text().strip()
+    except AttributeError:
+        return None
+
+
 class Opinion:
 
     def __init__(self, opinion):
@@ -8,15 +15,10 @@ class Opinion:
         self.useless = int(opinion.find("button", "vote-no").find("span").string)
         self.content = opinion.find("p", "product-review-body").getText()
         self.date_of_issue = opinion.find("span", "review-time").find_all("time")[0]["datetime"]
+        risk_values = [['div', 'product-review-summary', 'em'], ['div', 'product-review-pz', 'em'],
+                       ['div', 'cons-cell', 'ul'], ['div', 'pros-cell', 'ul']]
+        self.recommendation, self.purchased, self.cons, self.pros = [set_value(opinion, *tags) for tags in risk_values]
         try:
-            self.recommendation = opinion.find("div", "product-review-summary").find("em").string
-            self.purchased = opinion.find("div", "product-review-pz").find("em").string
-            self.cons = opinion.find("div", "cons-cell").find("ul").get_text()
-            self.pros = opinion.find("div", "pros-cell").find("ul").get_text()
             self.date_of_purchase = opinion.find("span", "review-time").find_all("time")[1]["datetime"]
-        except (AttributeError, IndexError):
-            self.recommendation = None
-            self.purchased = None
+        except IndexError:
             self.date_of_purchase = None
-            self.cons = None
-            self.pros = None

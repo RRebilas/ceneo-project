@@ -13,11 +13,10 @@ bp = Blueprint('scrapper', __name__)
 def extract():
     if request.method == "POST":
         product_id = request.form.get('product-id')
-        if product_id is '':
+        if product_id == '':
             flash("Podaj kod produktu!")
         else:
-            Scrapper(product_id).scrap()
-            return redirect(url_for('products.product', id=product_id))
+            return Scrapper(product_id).scrap()
     return render_template('extraction.html')
 
 
@@ -112,3 +111,4 @@ class Scrapper(Product):
                 return redirect(url_for('products.product', id=self.product_id))
         else:
             flash("Brak danego produktu lub błąd połączenia")
+            return render_template('extraction.html')

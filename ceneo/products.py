@@ -24,6 +24,7 @@ def products():
 def product(id):
     p = Product(id)
     p.product_values()
+    print(p.data)
 
     return render_template('product_page.html', p=p)
 

@@ -1,9 +1,14 @@
 {% extends 'base.html'%}
 
 {% block header %}
-    <h3>{% block title %}{{ p.product_id }}{% endblock %}</h3>
+    <h3>{% block title %}{{ p.product_name }}{% endblock %}</h3>
 {% endblock %}
 
 {% block content %}
 <!--    table with scratched opinions -->
+    <div class="table-responsive-small">
+        <table class="table-striped-table-dark">
+
+        </table>
+    </div>
 {% endblock%}
