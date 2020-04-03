@@ -2,7 +2,7 @@ def set_value(opinion, tag, tag_class, child):
     try:
         return opinion.find(tag, tag_class).find(child).get_text().strip()
     except AttributeError:
-        return None
+        return ''
 
 
 class Opinion:
@@ -22,4 +22,4 @@ class Opinion:
         try:
             self.date_of_purchase = opinion.find("span", "review-time").find_all("time")[1]["datetime"]
         except IndexError:
-            self.date_of_purchase = None
+            self.date_of_purchase = ''

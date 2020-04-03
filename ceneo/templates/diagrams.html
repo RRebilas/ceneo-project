@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+
+{% block header%}
+<h3>{% block title %}{{ id }}{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+    <h3>Podział rekomendacji</h3>
+    {{ plot | safe}}
+    <h3>Oceny</h3>
+    {{ plot1 | safe }}
+{% endblock %}
