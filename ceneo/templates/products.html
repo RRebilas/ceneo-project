@@ -23,7 +23,11 @@
                         <td>{{ product.product_cons}}</td>
                         <td>{{ product.product_pros}}</td>
                         <td>{{ product.product_mean}}/5</td>
-                        <td><button class="btn btn-dark">Pobierz</button></td>
+                        <td>
+                            <a href="{{ url_for('products.json_file', id=id) }}">
+                                <button class="btn-dark mt-2" type="button">Pobierz JSON</button>
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </thead>
