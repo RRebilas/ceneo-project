@@ -1,14 +1,18 @@
 {% extends 'base.html'%}
 
 {% block header %}
-    <h3>{% block title %}{{ p.product_name }}{% endblock %}</h3>
+    <h3>{% block title %}{{ name }}{% endblock %}</h3>
 {% endblock %}
 
 {% block content %}
 <!--    table with scratched opinions -->
-    <div class="table-responsive-small">
-        <table class="table-striped-table-dark">
-
-        </table>
-    </div>
+        <div class="table-div container-fluid text-center">
+            {{ data | safe}}
+        </div>
+            <a href="{{ url_for('products.json_file', id=id) }}">
+                <button class="btn-dark mt-2" type="button">Pobierz JSON</button>
+            </a>
+            <a href=" {{ url_for('products.diagrams', id=id) }}">
+                <button class="btn btn-dark mt-2" type="submit" name="diagrams">Wykresy</button>
+            </a>
 {% endblock%}
