@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+    <a href="{{ url_for("products.product", id = id) }}"><button class="btn btn-dark mt-2">Powrót</button></a>
     <h3>Podział rekomendacji</h3>
     {{ plot | safe}}
     <h3>Oceny</h3>

@@ -1,3 +1,4 @@
+mpld3
 matplotlib
 pandas
 click

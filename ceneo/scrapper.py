@@ -68,9 +68,9 @@ class Product(ProductPage):
         db = get_db()
 
         db.execute('INSERT INTO opinions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                   (element.opinion_id, element.author, element.stars, element.useful, element.useless, element.content,
+                   (element.opinion_id, element.author, element.stars, element.useful, element.useless,
                     element.date_of_issue, element.recommendation, element.purchased, element.date_of_purchase,
-                    element.cons, element.pros, self.product_id))
+                    element.cons, element.pros, element.content, self.product_id))
         db.commit()
 
 

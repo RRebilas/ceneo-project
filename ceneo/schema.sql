@@ -12,13 +12,13 @@ CREATE TABLE opinions (
                           stars INTEGER NOT NULL,
                           useful INTEGER NOT NULL,
                           useless INTEGER NOT NULL,
-                          content TEXT NOT NULL,
                           date_of_issue TEXT NOT NULL,
                           recommendation TEXT,
                           purchased TEXT,
                           date_of_purchase TEXT,
                           cons TEXT,
                           pros TEXT,
+                          content TEXT NOT NULL,
                           product_id int NOT NULL,
                           FOREIGN KEY(product_id) REFERENCES products(product_id)
 )
