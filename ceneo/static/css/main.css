@@ -28,3 +28,7 @@ li.nav-item.nav-link a.nav-link {
     overflow-y: scroll;
     overflow-x: auto;
 }
+.table-div .dataframe tr th, td{
+    padding: 0;
+    font-size: 14px;
+}

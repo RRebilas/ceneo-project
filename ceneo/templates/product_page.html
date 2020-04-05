@@ -6,13 +6,18 @@
 
 {% block content %}
 <!--    table with scratched opinions -->
-        <div class="table-div container-fluid text-center">
-            {{ data | safe}}
+        <div class="table-div container-fluid">
+            {{ table | safe}}
         </div>
             <a href="{{ url_for('products.json_file', id=id) }}">
                 <button class="btn btn-dark mt-2" type="button">Pobierz JSON</button>
             </a>
-            <a href=" {{ url_for('products.diagrams', id=id) }}">
+            <a href="{{ url_for('products.diagrams', id=id) }}">
                 <button class="btn btn-dark mt-2" type="submit" name="diagrams">Wykresy</button>
             </a>
 {% endblock%}
+{% block scipts %}
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}
