@@ -46,6 +46,7 @@ def diagrams(id):
     rates = p.data['stars'].value_counts()
     fig, ax = plt.subplots()
     rates.plot.bar()
+    ax.set_title('Oceny')
     plot1 = mpld3.fig_to_html(fig)
     # recommendation chart
     recommendation = p.data[(p.data['recommendation']) != '']['recommendation'].value_counts()
@@ -54,16 +55,6 @@ def diagrams(id):
     plot = mpld3.fig_to_html(fig)
     plt.close()
     return render_template('diagrams.html', plot=plot, plot1=plot1, id=p.product_id)
-
-
-@bp.route('/<int:id>/filtruj', methods=['POST', 'GET'])
-def filter_values(id):
-    text_like = ['autor', 'content', 'pros', 'cons']
-    # TODO if query of type
-    column = request.args.get('column', 'opinion_id')
-    query = request.args.get('query')
-    data = Product(id).data.query(column + '' + query)
-    return product(id, render_html(data))
 
 
 def render_html(data):

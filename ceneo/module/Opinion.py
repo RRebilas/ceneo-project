@@ -18,6 +18,7 @@ class Opinion:
         risk_values = [['div', 'product-review-summary', 'em'], ['div', 'product-review-pz', 'em'],
                        ['div', 'cons-cell', 'ul'], ['div', 'pros-cell', 'ul']]
         self.recommendation, self.purchased, self.cons, self.pros = [set_value(opinion, *tags) for tags in risk_values]
+        self.purchased = 'Tak' if (self.purchased == "Opinia potwierdzona zakupem") else 'Nie'
         try:
             self.date_of_purchase = opinion.find("span", "review-time").find_all("time")[1]["datetime"]
         except IndexError:

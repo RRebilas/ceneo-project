@@ -24,7 +24,7 @@ class Product:
         return pd.read_sql_query(sql, db)
 
     def save_to_file(self):
-        Path("/my/directory").mkdir(parents=True, exist_ok=True)
+        Path("./download").mkdir(parents=True, exist_ok=True)
         with open('./download/' + str(self.product_id) + '.json', 'w', encoding='utf8') as fp:
             fp.write(self.data.drop(columns=['product_id', 'product_name'])
                      .to_json(orient='records', force_ascii=False, indent=4))

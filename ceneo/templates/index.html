@@ -4,5 +4,69 @@
 {% endblock %}
 
 {% block content %}
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="card w-50 m-auto">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Cel aplikacji
+                    </h5>
+                    <p class="card-text">Aplikacja służy do zbierania, przetwarzania i wyświetlania danych i informacji
+                        na temat opinii wystawionych dla danego produktu w serwisie ceneo.pl przez użytkowników.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card w-50 m-auto">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Zastosowane biblioteki
+                    </h5>
+                    <p class="card-text">
+                        mpld3, matplotlib <br>
+                        pandas, sqlite <br>
+                        flask, flask-table <br>
+                        requests, beautifulsoup4
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card w-50 m-auto">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Opis działania
+                    </h5>
+                    <p class="card-text">
+                        Opinie pobierane i przetwarzane są za pomocą biblioteki beautfiulsoup. Tworzony jest obiekt z
+                        elementami opinii, który później jest wysyłany do bazy danych. Przetwarzanie danych i rysowanie
+                        wykresów odbywa się za pomocą biblioteki pandas wraz z matplotlib, a do stworzenia aplikacji
+                        internetowej wraz z routingiem użyłem frameworka flask.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card w-50 m-auto">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Zastosowane podejścia
+                    </h5>
+                    <p class="card-text">
+                        Zastosowałem podejście obiektowe. Dane przechowywane są w danych sqlite w modelu relacyjnym.
+                        Pobrane dane z bazy przetwarzane są w postaci ramki danych za pomocą
+                        biblioteki pandas Za sortowanie i wyświetlanie odpowiada dodatek flask-table.
+                        Skrypt filtrowania tabeli został napisan w języku JavaScript.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
