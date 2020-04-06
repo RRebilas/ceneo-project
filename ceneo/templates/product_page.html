@@ -5,9 +5,10 @@
         <div class="col-lg-6">
             <h3>{% block title %}{{ name }}{% endblock %}</h3>
         </div>
-            <div class="col-lg-6">
+            <div class="col-sm-6">
                 <div class="row">
                     <select name="column" id="column">
+                        <option value="" disabled selected>---</option>
                         <option value="opinion_id">id opinii</option>
                         <option value="author">autor</option>
                         <option value="content">treść</option>
@@ -20,6 +21,15 @@
                         <option value="pros">zalety</option>
                         <option value="cons">wady</option>
                         <option value="recommendation">rekomendacja</option>
+                    </select>
+                    <select name="operator" id="operator" style='display: none'>
+                        <option value="" disabled selected>---</option>
+                        <option value="=">=</option>
+                        <option value=">">></option>
+                        <option value=">=">=></option>
+                        <option value="<"><</option>
+                        <option value="<="><=</option>
+{#                        <option value="range">zakres</option>#}
                     </select>
                     <input type="text" name="query" id="query" class="col-sm-6">
                 </div>
@@ -39,13 +49,14 @@
         <button class="btn btn-dark mt-2" type="submit" name="diagrams">Wykresy</button>
     </a>
 
-    <button id="collapse-form" type="button" class="btn btn-dark mt-2" data-toggle="collapse" data-target="#form">Filtruj</button>
     <a href="{{ url_for('products.product', id=id) }}">
         <button class="btn btn-dark mt-2" type="submit" name="diagrams">Resetuj</button>
     </a>
 {% endblock%}
 {% block scripts %}
-    <script type="text/javascript">
+    <script src="{{ url_for('static', filename='js/Filtering.js') }}"></script>
+    <script>
+
         $(function(){
             const dict = {
                 opinion_id : 0,
@@ -61,33 +72,28 @@
                 cons: 10,
                 recommendation: 11,
             };
-            let index = 0;
+            const numericalColumns = [3, 4, 5];
+            const operator = document.getElementById('operator');
+            let index;
             $('#column').change(function(){
                 index = dict[$(this).val()];
-            });
-            $('#query').keyup(()=>{
-                SearchAndFilterThingy(index)
-            });
-
-            function SearchAndFilterThingy(index) {
-                let input, filter, table, tr, td, x;
-                input = document.getElementById("query");
-                filter = input.value.toUpperCase();
-                table = document.getElementById("opinions");
-                tr = table.getElementsByTagName("tr");
-
-                for (x = 0; x < tr.length; x++) {
-                    td = tr[x].getElementsByTagName("td")[index];
-                    if (td) {
-                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                            tr[x].style.display = "";
-                        }
-                        else {
-                            tr[x].style.display = "none";
-                        }
-                    }
+                if (numericalColumns.includes(index)) {
+                    operator.style.display = '';
+                } else {
+                    operator.style.display = 'none';
                 }
-            }
+            });
+
+            $('#query').keyup(function(){
+                if (numericalColumns.includes(index)) {
+                    filter.filterNumerical(index);
+                } else {
+                    filter.searchForOccurrence(index);
+                }
+            });
+
+            const filter = new Filtering('opinions', 'query', dict);
+
         });
     </script>
 {% endblock %}
