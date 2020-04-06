@@ -1,23 +1,93 @@
 {% extends 'base.html'%}
 
 {% block header %}
-    <h3>{% block title %}{{ name }}{% endblock %}</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <h3>{% block title %}{{ name }}{% endblock %}</h3>
+        </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <select name="column" id="column">
+                        <option value="opinion_id">id opinii</option>
+                        <option value="author">autor</option>
+                        <option value="content">treść</option>
+                        <option value="stars">ocena</option>
+                        <option value="useful">przydatne</option>
+                        <option value="useless">nieprzydatne</option>
+                        <option value="date_of_issue">data wystawienia</option>
+                        <option value="purchased">zakup</option>
+                        <option value="date_of_purchase">data zakupu</option>
+                        <option value="pros">zalety</option>
+                        <option value="cons">wady</option>
+                        <option value="recommendation">rekomendacja</option>
+                    </select>
+                    <input type="text" name="query" id="query" class="col-sm-6">
+                </div>
+            </div>
+    </div>
 {% endblock %}
 
 {% block content %}
 <!--    table with scratched opinions -->
-        <div class="table-div container-fluid">
-            {{ table | safe}}
-        </div>
-            <a href="{{ url_for('products.json_file', id=id) }}">
-                <button class="btn btn-dark mt-2" type="button">Pobierz JSON</button>
-            </a>
-            <a href="{{ url_for('products.diagrams', id=id) }}">
-                <button class="btn btn-dark mt-2" type="submit" name="diagrams">Wykresy</button>
-            </a>
-{% endblock%}
-{% block scipts %}
-    <script type="text/javascript">
+    <div class="table-div container-fluid">
+        {{ table | safe}}
+    </div>
+    <a href="{{ url_for('products.json_file', id=id) }}">
+        <button class="btn btn-dark mt-2" type="button">Pobierz JSON</button>
+    </a>
+    <a href="{{ url_for('products.diagrams', id=id) }}">
+        <button class="btn btn-dark mt-2" type="submit" name="diagrams">Wykresy</button>
+    </a>
 
+    <button id="collapse-form" type="button" class="btn btn-dark mt-2" data-toggle="collapse" data-target="#form">Filtruj</button>
+    <a href="{{ url_for('products.product', id=id) }}">
+        <button class="btn btn-dark mt-2" type="submit" name="diagrams">Resetuj</button>
+    </a>
+{% endblock%}
+{% block scripts %}
+    <script type="text/javascript">
+        $(function(){
+            const dict = {
+                opinion_id : 0,
+                author: 1,
+                content: 2,
+                stars: 3,
+                useful: 4,
+                useless: 5,
+                date_of_issue: 6,
+                purchased: 7,
+                date_of_purchase: 8,
+                pros: 9,
+                cons: 10,
+                recommendation: 11,
+            };
+            let index = 0;
+            $('#column').change(function(){
+                index = dict[$(this).val()];
+            });
+            $('#query').keyup(()=>{
+                SearchAndFilterThingy(index)
+            });
+
+            function SearchAndFilterThingy(index) {
+                let input, filter, table, tr, td, x;
+                input = document.getElementById("query");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("opinions");
+                tr = table.getElementsByTagName("tr");
+
+                for (x = 0; x < tr.length; x++) {
+                    td = tr[x].getElementsByTagName("td")[index];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[x].style.display = "";
+                        }
+                        else {
+                            tr[x].style.display = "none";
+                        }
+                    }
+                }
+            }
+        });
     </script>
 {% endblock %}
