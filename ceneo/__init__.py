@@ -36,6 +36,6 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
-        return "about author"
+        return render_template('about.html')
 
     return app
